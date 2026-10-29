@@ -7,7 +7,8 @@ import {
   PlayCircle, ArrowRight, ArrowLeft, MapPin, Quote, Trophy, Target,
   Sparkles, Compass, Cpu, Brain, LineChart, Plane, Camera, Maximize2,
   Code, Calendar, Building2, ShieldCheck, Video, CheckCircle2, ChevronDown,
-  CreditCard, Heart, Briefcase, FileText, Zap, XCircle, Send, Monitor, Sun, Cloud, PenTool
+  CreditCard, Heart, Briefcase, FileText, Zap, XCircle, Send, Monitor, Sun, Cloud, PenTool,
+  Percent, Gift
 } from 'lucide-react';
 
 import { FaFacebookF, FaInstagram, FaYoutube, FaWhatsapp } from 'react-icons/fa';
@@ -206,6 +207,66 @@ function Counter({ end, duration = 1800, suffix = '', decimals = 0 }) {
     return () => clearInterval(t);
   }, [visible, end, duration, decimals]);
   return <span ref={ref}>{decimals ? n.toFixed(decimals) : n}{suffix}</span>;
+}
+
+/* ============================================================
+   🔔 WELCOME POP-UP MODAL
+   ============================================================ */
+function WelcomePopup() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    // Show popup after 2 seconds on load
+    const timer = setTimeout(() => {
+      setIsOpen(true);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+      <div className="relative bg-[#0F172A] border border-[#00E5FF]/40 rounded-3xl max-w-md w-full p-8 text-center shadow-2xl animate-[float_6s_ease-in-out_infinite]">
+        
+        {/* Close Button */}
+        <button 
+          onClick={() => setIsOpen(false)}
+          className="absolute top-4 right-4 text-white/50 hover:text-white bg-white/5 hover:bg-white/10 p-2 rounded-full transition"
+          aria-label="Close"
+        >
+          <X size={20} />
+        </button>
+
+        <div className="w-20 h-20 mx-auto bg-gradient-to-br from-[#1E40AF] to-[#7C3AED] rounded-full flex items-center justify-center mb-6 shadow-lg shadow-[#7C3AED]/30">
+          <Gift size={40} className="text-white" />
+        </div>
+
+        <h2 className="text-3xl font-extrabold text-white font-display mb-3">
+          Welcome to <span className="gradient-brand">EduRatnam!</span>
+        </h2>
+        <p className="text-white/70 mb-8">
+          Get <strong className="text-[#F59E0B]">20% OFF</strong> on your first course. Limited time offer!
+        </p>
+
+        <div className="flex flex-col gap-3">
+          <Link 
+            to="/courses" 
+            onClick={() => setIsOpen(false)}
+            className="w-full bg-gradient-to-r from-[#1E40AF] to-[#7C3AED] text-white font-bold py-3.5 rounded-xl hover:shadow-lg transition btn-shine"
+          >
+            Explore Courses
+          </Link>
+          <button 
+            onClick={() => setIsOpen(false)}
+            className="w-full text-white/50 hover:text-white text-sm font-medium py-2 transition"
+          >
+            Maybe later
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 /* ============================================================
@@ -515,7 +576,7 @@ function HomeAbout() {
 }
 
 /* ============================================================
-   📚 COURSES DATA & COMPONENT (Updated with UI/UX & Cloud)
+   📚 COURSES DATA & COMPONENT
    ============================================================ */
 const COURSES = [
   { 
@@ -623,7 +684,6 @@ const COURSES = [
     ],
     benefits: ['Lucrative career in surveying/agri', 'Legal DGCA certification prep', 'Hands-on hardware assembly']
   },
-  // ✅ NEW COURSE 1: UI/UX Design
   { 
     id:'uiux', color:'#FF2EC4', img: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&q=80',
     title:'UI/UX Design', tag:'Creative', 
@@ -639,7 +699,6 @@ const COURSES = [
     ],
     benefits: ['High demand for UI/UX designers', 'Freelance friendly', 'Creative and strategic work']
   },
-  // ✅ NEW COURSE 2: Cloud Computing
   { 
     id:'cloud', color:'#0EA5E9', img: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=600&q=80',
     title:'Cloud Computing', tag:'Enterprise', 
@@ -756,7 +815,7 @@ function HappyWake() {
   } else {
     greeting = "Good Evening!";
     sub = "Perfect time to learn something new.";
-    Icon = Sun; // Replacing Moon with Sun for simplicity in imports
+    Icon = Sun;
     color = "#A855F7";
   }
 
@@ -1621,6 +1680,7 @@ function Footer() {
 function HomePage() {
   return (
     <>
+      <WelcomePopup />
       <HomeHero />
       <HomeAbout />
       <HomeCourses />
